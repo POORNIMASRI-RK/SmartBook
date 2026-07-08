@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+.card{
+  background-color: beige;
+  max-width: 200px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-family: sans-serif;
+  text-align: center;
+  margin: 10px;
+  padding: 2px;
+  display: inline-block;
+  font-family: 'Times New Roman', Times, serif;
+}
+.card img{
+  width: 200px;
+}
