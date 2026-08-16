@@ -18,7 +18,7 @@ app.use("/", OrderRoutes);
 
 connectTodb();
 connectRedis();
-app.get("/product",(req,res) => {
+app.get("/",(req,res) => {
     res.send("welcome to the backend");
 })
 
