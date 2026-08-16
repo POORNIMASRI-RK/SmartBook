@@ -3,7 +3,6 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { API_BASE_URL } from "../api/config";
 import {
   Package,
   Clock,
@@ -41,8 +40,8 @@ const OrderPage = () => {
     setError("");
     try {
       const endpoint = isAdmin
-        ? `${API_BASE_URL}/getAllOrders`
-        : `${API_BASE_URL}/getOrderById`;
+        ? `${import.meta.env.VITE_BACKEND_URL}getAllOrders`
+        : `${import.meta.env.VITE_BACKEND_URL}getOrderById`;
 
       const res = await axios.get(endpoint, {
         headers: {
@@ -68,7 +67,7 @@ const OrderPage = () => {
     setUpdatingStatusId(orderId);
     try {
       const res = await axios.put(
-        `${API_BASE_URL}/updateOrderStatus/${orderId}`,
+        `${import.meta.env.VITE_BACKEND_URL}updateOrderStatus/${orderId}`,
         { status: newStatus },
         {
           headers: {
@@ -106,7 +105,7 @@ const OrderPage = () => {
     if (!window.confirm("Are you sure you want to delete this order record?")) return;
     setDeletingOrderId(orderId);
     try {
-      await axios.delete(`${API_BASE_URL}/deleteOrder/${orderId}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}deleteOrder/${orderId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

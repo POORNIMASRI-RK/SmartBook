@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/user/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { API_BASE_URL } from "../../api/config";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -52,7 +51,7 @@ const SignIn = () => {
 
     setLoading(true);
     try {
-      const res = await axios.post(`${API_BASE_URL}/login`, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}login`, {
         email: email.trim(),
         password: password.trim(),
       });

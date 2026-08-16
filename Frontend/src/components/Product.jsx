@@ -6,7 +6,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { addToCart } from "../features/cart/cartSlice";
 import { addToWishlist, removeFromWishlist } from "../features/wishlist/wishlistSlice";
 import axios from "axios";
-import { API_BASE_URL } from "../api/config";
 import {
   Sparkles,
   SlidersHorizontal,
@@ -52,7 +51,7 @@ const Product = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const resp = await axios.get(`${API_BASE_URL}/products`);
+        const resp = await axios.get(`${import.meta.env.VITE_BACKEND_URL}products`);
         const list = resp.data.product || resp.data.products || [];
         setProducts(Array.isArray(list) ? list : []);
       } catch (err) {

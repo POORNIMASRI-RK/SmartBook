@@ -4,7 +4,6 @@ import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL } from "../api/config";
 import { loginSuccess, logout } from "../features/user/userSlice";
 import {
   User,
@@ -48,7 +47,7 @@ const ProfilePage = () => {
     setSaving(true);
     try {
       const res = await axios.put(
-        `${API_BASE_URL}/update/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}update/${userId}`,
         { name, email },
         {
           headers: {

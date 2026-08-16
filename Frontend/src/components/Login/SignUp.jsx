@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/user/userSlice";
-import { API_BASE_URL } from "../../api/config";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -23,7 +22,7 @@ const SignUp = () => {
         }
 
         try{
-            const response = await axios.post(`${API_BASE_URL}/register`,{
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}register`,{
                 name: username.trim(),
                 email: email.trim(),
                 password: password.trim(),

@@ -13,7 +13,6 @@ import { loginSuccess,logout } from './features/user/userSlice';
 import { loadUserCart } from './features/cart/cartSlice';
 import { loadUserWishlist } from './features/wishlist/wishlistSlice';
 import { jwtDecode } from "jwt-decode";
-import { API_BASE_URL } from './api/config';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import AdminProducts from "./components/AdminProducts";
@@ -38,7 +37,7 @@ function App(){
         return;
       }
       try{
-        const res = await axios.get(`${API_BASE_URL}/users`,{
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users`,{
           headers:{
             Authorization: `Bearer ${token}`,
           },
