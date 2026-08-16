@@ -108,6 +108,8 @@ function App(){
             <Route path="/admin/orders" element={<OrderPage />} />
           </Route>
 
+          {/* Catch-all fallback */}
+          <Route path="*" element={<Product />} />
         </Routes>
       </BrowserRouter>
     </>
