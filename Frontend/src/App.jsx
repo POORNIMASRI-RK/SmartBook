@@ -37,7 +37,7 @@ function App(){
         return;
       }
       try{
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users`,{
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}users`,{
           headers:{
             Authorization: `Bearer ${token}`,
           },
