@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Product from './components/Product';
 import Cart from "./components/Cart";
 import { BrowserRouter, Routes,Route } from 'react-router-dom';
@@ -7,11 +6,14 @@ import OrderSuccess from './components/OrderSuccess';
 import Wishlist from './components/Wishlist';
 import SignUp from './components/Login/SignUp';
 import SignIn from './components/Login/SignIn';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { loginSuccess,logout } from './features/user/userSlice';
+import { loadUserCart } from './features/cart/cartSlice';
+import { loadUserWishlist } from './features/wishlist/wishlistSlice';
 import { jwtDecode } from "jwt-decode";
+import { API_BASE_URL } from './api/config';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import AdminProducts from "./components/AdminProducts";
@@ -20,6 +22,12 @@ import ProfilePage from './components/ProfilePage';
 
 function App(){
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(loadUserCart(user));
+    dispatch(loadUserWishlist(user));
+  }, [user, dispatch]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -30,7 +38,7 @@ function App(){
         return;
       }
       try{
-        const res = await axios.get("http://localhost:3000/users",{
+        const res = await axios.get(`${API_BASE_URL}/users`,{
           headers:{
             Authorization: `Bearer ${token}`,
           },

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
@@ -21,7 +22,7 @@ app.get("/product",(req,res) => {
     res.send("welcome to the backend");
 })
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);

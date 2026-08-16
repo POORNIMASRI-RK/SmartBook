@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { API_BASE_URL } from "../api/config";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -207,7 +208,7 @@ const BuyNow = () => {
       // API REQUEST
 
       const response = await axios.post(
-        "http://localhost:3000/addOrder",
+        `${API_BASE_URL}/addOrder`,
         payload,
         {
           headers: {

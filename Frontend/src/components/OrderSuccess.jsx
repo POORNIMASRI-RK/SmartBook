@@ -15,57 +15,52 @@ import {
   ArrowLeft,
   Printer,
   ShoppingBag,
+  Sparkles,
+  Clock,
+  Check,
 } from "lucide-react";
 
 function OrderSuccess() {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  // Get order data sent from BuyNow
   const order = state?.order;
 
-  // If no order data exists
   if (!order) {
     return (
       <>
         <Navbar />
-
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-          <div className="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
-
-            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
-              <Package className="w-10 h-10 text-red-500" />
+        <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center px-4">
+          <div className="bg-white rounded-3xl border border-[#E8DCCB] shadow-sm p-10 max-w-md w-full text-center">
+            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-5 text-red-500">
+              <Package className="w-10 h-10" />
             </div>
-
-            <h2 className="text-2xl font-bold text-[#2B2118] mb-3">
-              No Order Found
+            <h2 className="text-2xl font-bold font-serif text-[#2C1810] mb-3">
+              No Order Details Found
             </h2>
-
-            <p className="text-gray-500 mb-6">
-              We couldn't find your order details.
+            <p className="text-gray-500 text-sm mb-6">
+              We couldn't find your recent order receipt. Please check your order history.
             </p>
-
             <button
-              onClick={() => navigate("/")}
-              className="bg-[#5C3A21] hover:bg-[#432a18] text-white px-6 py-3 rounded-xl font-semibold"
+              onClick={() => navigate("/orders")}
+              className="bg-[#5C3A21] hover:bg-[#3E2615] text-[#FFF8E7] px-6 py-3 rounded-xl font-bold transition shadow-md"
             >
-              Go to Home
+              View My Orders
             </button>
-
           </div>
         </div>
-
         <Footer />
       </>
     );
   }
 
-  // Support different backend field names
   const orderId =
     order._id ||
     order.orderId ||
     order.id ||
     "N/A";
+
+  const orderIdShort = orderId.length > 8 ? `#ORD-${orderId.substring(orderId.length - 6).toUpperCase()}` : orderId;
 
   const userName =
     order.UserName ||
@@ -73,24 +68,12 @@ function OrderSuccess() {
     order.name ||
     "Customer";
 
-  const phone =
-    order.phone ||
-    "N/A";
-
-  const address =
-    order.address ||
-    "N/A";
-
-  const payment =
-    order.paymentMethod ||
-    order.payment ||
-    "Cash on Delivery";
-
+  const phone = order.phone || "N/A";
+  const address = order.address || "N/A";
+  const payment = order.paymentMethod || order.payment || "Cash on Delivery";
   const totalPrice = Number(order.totalPrice || 0);
-
   const products = order.products || [];
 
-  // Delivery date
   const deliveryDate = new Date();
   deliveryDate.setDate(deliveryDate.getDate() + 5);
 
@@ -106,431 +89,187 @@ function OrderSuccess() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-gray-100 py-10 px-4">
-
-        <div className="max-w-5xl mx-auto">
-
-          {/* SUCCESS HEADER */}
-
-          <div className="bg-white rounded-2xl shadow-sm p-8 text-center mb-6">
-
-            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
-
-              <CheckCircle2 className="w-14 h-14 text-green-600" />
-
+      <div className="min-h-screen bg-[#FAF8F5] text-[#2C1810] py-10 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          
+          {/* Success Banner Card */}
+          <div className="bg-white rounded-3xl border border-[#E8DCCB] shadow-xl p-8 sm:p-10 text-center mb-8 relative overflow-hidden">
+            <div className="absolute -top-12 -right-12 w-36 h-36 bg-[#D4A017]/10 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="w-20 h-20 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+              <CheckCircle2 className="w-12 h-12 text-emerald-600" />
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-green-600">
-              Order Placed Successfully!
+            <div className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider mb-3">
+              <Sparkles className="w-3.5 h-3.5" /> Order Confirmed
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl font-extrabold font-serif text-[#2C1810]">
+              Thank You for Your Order!
             </h1>
 
-            <p className="text-gray-500 mt-3">
-              Thank you for shopping with PaperHaven.
+            <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
+              Your order has been received and is being prepared with care by our PaperHaven literary team.
             </p>
 
-            <div className="mt-5 inline-flex items-center gap-2 bg-green-50 text-green-700 px-5 py-2 rounded-full font-semibold">
-
-              <CheckCircle2 className="w-5 h-5" />
-
-              Order Confirmed
-
+            {/* Order Progress Tracker */}
+            <div className="mt-8 pt-6 border-t border-slate-100 max-w-2xl mx-auto">
+              <div className="flex items-center justify-between text-xs font-bold text-[#5C3A21] mb-2">
+                <span>Order Placed</span>
+                <span>Processing</span>
+                <span className="text-gray-400">Shipped</span>
+                <span className="text-gray-400">Delivered</span>
+              </div>
+              <div className="h-2 bg-slate-100 rounded-full overflow-hidden flex">
+                <div className="w-1/2 bg-gradient-to-r from-[#5C3A21] to-[#D4A017] rounded-full animate-pulse" />
+              </div>
+              <p className="text-xs text-gray-400 mt-2 font-medium">
+                Estimated Delivery: <strong className="text-emerald-700">{formatDate(deliveryDate)}</strong>
+              </p>
             </div>
-
           </div>
 
-
-          {/* ORDER ID */}
-
-          <div className="bg-[#5C3A21] text-white rounded-2xl p-6 mb-6">
-
-            <div className="flex flex-col md:flex-row justify-between gap-4">
-
+          {/* Receipt Info Bar */}
+          <div className="bg-[#5C3A21] text-[#FFF8E7] rounded-2xl p-6 mb-6 shadow-lg">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center sm:text-left">
               <div>
-
-                <p className="text-[#D8C2B0] text-sm">
-                  Order ID
-                </p>
-
-                <p className="text-xl font-bold mt-1 break-all">
-                  {orderId}
-                </p>
-
+                <p className="text-[#D8C2B0] text-xs font-bold uppercase tracking-wider">Order Reference</p>
+                <p className="text-lg font-mono font-extrabold mt-0.5">{orderIdShort}</p>
               </div>
 
               <div>
-
-                <p className="text-[#D8C2B0] text-sm">
-                  Order Status
-                </p>
-
-                <p className="text-xl font-bold text-green-300 mt-1">
-                  Confirmed
-                </p>
-
+                <p className="text-[#D8C2B0] text-xs font-bold uppercase tracking-wider">Status</p>
+                <p className="text-lg font-bold text-emerald-400 mt-0.5">Confirmed & Paid</p>
               </div>
 
               <div>
-
-                <p className="text-[#D8C2B0] text-sm">
-                  Payment
-                </p>
-
-                <p className="text-xl font-bold mt-1">
-                  {payment}
-                </p>
-
+                <p className="text-[#D8C2B0] text-xs font-bold uppercase tracking-wider">Payment Method</p>
+                <p className="text-lg font-bold mt-0.5">{payment}</p>
               </div>
-
             </div>
-
           </div>
 
-
-          {/* CUSTOMER + DELIVERY */}
-
+          {/* Customer & Delivery Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-
-            {/* CUSTOMER */}
-
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-
-              <div className="flex items-center gap-3 mb-5">
-
-                <div className="w-10 h-10 bg-[#f5eee8] rounded-lg flex items-center justify-center">
-
-                  <User className="w-5 h-5 text-[#5C3A21]" />
-
-                </div>
-
-                <h2 className="text-xl font-bold text-[#2B2118]">
-                  Customer Details
-                </h2>
-
-              </div>
-
-              <div className="space-y-4">
-
-                <div className="flex gap-3">
-
-                  <User className="w-5 h-5 text-gray-400 mt-0.5" />
-
-                  <div>
-
-                    <p className="text-sm text-gray-500">
-                      Name
-                    </p>
-
-                    <p className="font-semibold">
-                      {userName}
-                    </p>
-
-                  </div>
-
-                </div>
-
-
-                <div className="flex gap-3">
-
-                  <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
-
-                  <div>
-
-                    <p className="text-sm text-gray-500">
-                      Phone
-                    </p>
-
-                    <p className="font-semibold">
-                      {phone}
-                    </p>
-
-                  </div>
-
-                </div>
-
-
-                <div className="flex gap-3">
-
-                  <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-
-                  <div>
-
-                    <p className="text-sm text-gray-500">
-                      Shipping Address
-                    </p>
-
-                    <p className="font-semibold">
-                      {address}
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            {/* DELIVERY */}
-
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-
-              <div className="flex items-center gap-3 mb-5">
-
-                <div className="w-10 h-10 bg-[#f5eee8] rounded-lg flex items-center justify-center">
-
-                  <Truck className="w-5 h-5 text-[#5C3A21]" />
-
-                </div>
-
-                <h2 className="text-xl font-bold text-[#2B2118]">
-                  Delivery Details
-                </h2>
-
-              </div>
-
-              <div className="space-y-4">
-
-                <div>
-
-                  <p className="text-sm text-gray-500">
-                    Estimated Delivery
-                  </p>
-
-                  <p className="font-bold text-blue-600">
-                    {formatDate(deliveryDate)}
-                  </p>
-
-                </div>
-
-
-                <div>
-
-                  <p className="text-sm text-gray-500">
-                    Delivery Type
-                  </p>
-
-                  <p className="font-semibold">
-                    Free Delivery
-                  </p>
-
-                </div>
-
-
-                <div>
-
-                  <p className="text-sm text-gray-500">
-                    Order Status
-                  </p>
-
-                  <span className="inline-block mt-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                    Confirmed
-                  </span>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          {/* PRODUCTS */}
-
-          <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-
-            <div className="flex items-center gap-3 mb-6">
-
-              <div className="w-10 h-10 bg-[#f5eee8] rounded-lg flex items-center justify-center">
-
-                <ShoppingBag className="w-5 h-5 text-[#5C3A21]" />
-
-              </div>
-
-              <h2 className="text-xl font-bold text-[#2B2118]">
-                Ordered Books
+            <div className="bg-white rounded-2xl border border-[#E8DCCB] shadow-sm p-6 space-y-4">
+              <h2 className="text-lg font-bold font-serif text-[#2C1810] flex items-center gap-2 pb-3 border-b border-[#F3EFEA]">
+                <User className="w-5 h-5 text-[#5C3A21]" /> Customer Details
               </h2>
 
+              <div className="space-y-3 text-sm">
+                <div>
+                  <span className="text-xs text-gray-400 font-medium block">Full Name</span>
+                  <span className="font-bold text-[#2C1810]">{userName}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-gray-400 font-medium block">Phone Number</span>
+                  <span className="font-bold text-[#2C1810]">{phone}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-gray-400 font-medium block">Shipping Address</span>
+                  <span className="font-semibold text-slate-700">{address}</span>
+                </div>
+              </div>
             </div>
 
+            <div className="bg-white rounded-2xl border border-[#E8DCCB] shadow-sm p-6 space-y-4">
+              <h2 className="text-lg font-bold font-serif text-[#2C1810] flex items-center gap-2 pb-3 border-b border-[#F3EFEA]">
+                <Truck className="w-5 h-5 text-[#5C3A21]" /> Shipping & Delivery
+              </h2>
 
-            <div className="space-y-5">
+              <div className="space-y-3 text-sm">
+                <div>
+                  <span className="text-xs text-gray-400 font-medium block">Delivery Method</span>
+                  <span className="font-bold text-emerald-600">Standard Express Delivery (Free)</span>
+                </div>
+                <div>
+                  <span className="text-xs text-gray-400 font-medium block">Expected Arrival</span>
+                  <span className="font-bold text-[#5C3A21]">{formatDate(deliveryDate)}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-gray-400 font-medium block">Updates</span>
+                  <span className="text-xs text-gray-500 font-medium">Tracking notifications will be sent live.</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
+          {/* Ordered Products Breakdown */}
+          <div className="bg-white rounded-2xl border border-[#E8DCCB] shadow-sm p-6 mb-8">
+            <h2 className="text-lg font-bold font-serif text-[#2C1810] flex items-center gap-2 pb-4 border-b border-[#F3EFEA]">
+              <ShoppingBag className="w-5 h-5 text-[#5C3A21]" /> Ordered Books ({products.length})
+            </h2>
+
+            <div className="divide-y divide-[#F3EFEA] py-2">
               {products.map((item, index) => {
-
-                const productName =
-                  item.productName ||
-                  item.BookName ||
-                  item.name ||
-                  "Book";
-
-                const quantity =
-                  Number(item.quantity || 1);
-
-                const price =
-                  Number(item.price || 0);
-
-                const itemTotal =
-                  price * quantity;
-
-                const imgUrl =
-                  item.Image ||
-                  item.image ||
-                  item.product?.Image ||
-                  item.product?.image;
+                const productName = item.productName || item.BookName || item.name || "Book";
+                const quantity = Number(item.quantity || 1);
+                const price = Number(item.price || item.Price || 0);
+                const itemTotal = price * quantity;
+                const imgUrl = item.Image || item.image || item.product?.Image || item.product?.image;
 
                 return (
-                  <div
-                    key={item._id || item.product || index}
-                    className="flex items-center justify-between gap-4 border-b border-gray-100 pb-5 last:border-b-0 last:pb-0"
-                  >
-
+                  <div key={index} className="py-4 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-
-                      <div className="w-16 h-20 bg-gray-100 rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center p-1 flex-shrink-0">
-
+                      <div className="w-14 h-16 bg-[#FFF8E7] rounded-xl border border-slate-200 overflow-hidden p-1 flex items-center justify-center flex-shrink-0">
                         {imgUrl ? (
-                          <img
-                            src={imgUrl}
-                            alt={productName}
-                            className="w-full h-full object-contain"
-                          />
+                          <img src={imgUrl} alt={productName} className="w-full h-full object-contain" />
                         ) : (
-                          <Package className="w-7 h-7 text-gray-400" />
+                          <Package className="w-6 h-6 text-gray-400" />
                         )}
-
                       </div>
-
                       <div>
-
-                        <h3 className="font-bold text-[#2B2118]">
-                          {productName}
-                        </h3>
-
-                        <p className="text-sm text-gray-500 mt-1">
+                        <h3 className="font-bold font-serif text-[#2C1810] text-sm sm:text-base">{productName}</h3>
+                        <p className="text-xs text-gray-500 mt-0.5">
                           ₹{price.toFixed(2)} × {quantity}
                         </p>
-
                       </div>
-
                     </div>
 
-
-                    <p className="font-bold text-[#5C3A21]">
+                    <span className="font-black text-[#5C3A21] text-base">
                       ₹{itemTotal.toFixed(2)}
-                    </p>
-
+                    </span>
                   </div>
                 );
               })}
-
             </div>
 
-
-            {/* TOTAL */}
-
-            <div className="border-t mt-6 pt-5">
-
-              <div className="flex justify-between text-lg">
-
-                <span className="text-gray-600">
-                  Subtotal
-                </span>
-
-                <span>
-                  ₹{totalPrice.toFixed(2)}
-                </span>
-
+            <div className="border-t border-[#F3EFEA] pt-4 mt-2 space-y-2 text-sm">
+              <div className="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span>₹{totalPrice.toFixed(2)}</span>
               </div>
-
-
-              <div className="flex justify-between text-lg mt-2">
-
-                <span className="text-gray-600">
-                  Delivery
-                </span>
-
-                <span className="text-green-600 font-semibold">
-                  Free
-                </span>
-
+              <div className="flex justify-between text-gray-600">
+                <span>Shipping</span>
+                <span className="text-emerald-600 font-bold">Free</span>
               </div>
-
-
-              <div className="flex justify-between text-2xl font-bold border-t mt-4 pt-4">
-
-                <span>
-                  Total
-                </span>
-
-                <span className="text-[#5C3A21]">
-                  ₹{totalPrice.toFixed(2)}
-                </span>
-
+              <div className="flex justify-between text-xl font-black text-[#2C1810] pt-3 border-t">
+                <span>Total Amount Paid</span>
+                <span className="text-[#5C3A21]">₹{totalPrice.toFixed(2)}</span>
               </div>
-
             </div>
-
           </div>
 
-
-          {/* PAYMENT */}
-
-          <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-
-            <div className="flex items-center gap-3">
-
-              <CreditCard className="w-6 h-6 text-[#5C3A21]" />
-
-              <div>
-
-                <p className="text-sm text-gray-500">
-                  Payment Method
-                </p>
-
-                <p className="font-bold">
-                  {payment}
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          {/* BUTTONS */}
-
+          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-
             <button
-              onClick={() => navigate("/")}
-              className="flex items-center justify-center gap-2 bg-[#5C3A21] hover:bg-[#432a18] text-white px-7 py-3 rounded-xl font-semibold transition"
+              onClick={() => navigate("/orders")}
+              className="flex items-center justify-center gap-2 bg-[#5C3A21] hover:bg-[#3E2615] text-[#FFF8E7] px-8 py-3.5 rounded-xl font-bold transition shadow-lg"
             >
-
-              <ArrowLeft className="w-5 h-5" />
-
-              Continue Shopping
-
+              <Package className="w-5 h-5" />
+              View All My Orders
             </button>
-
 
             <button
               onClick={() => window.print()}
-              className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-xl font-semibold transition"
+              className="flex items-center justify-center gap-2 bg-white hover:bg-slate-100 text-[#5C3A21] border border-[#E8DCCB] px-8 py-3.5 rounded-xl font-bold transition shadow-sm"
             >
-
               <Printer className="w-5 h-5" />
-
-              Print Invoice
-
+              Print Receipt
             </button>
-
           </div>
 
         </div>
-
       </div>
 
       <Footer />

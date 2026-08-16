@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import axios from "axios";
+import { API_BASE_URL } from "../api/config";
 
 const AdminProducts = () => {
   // 1. Create a state variable for each input field and products list
@@ -19,7 +20,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     try {
       console.log("Fetching products...");
-      const resp = await axios.get("http://localhost:3000/products");
+      const resp = await axios.get(`${API_BASE_URL}/products`);
       console.log("Products fetched: ", resp);
       setProducts(resp.data.product || resp.data.products || []);
     } catch (err) {
@@ -41,7 +42,7 @@ const AdminProducts = () => {
       if (editId) {
         // Edit existing product
         const response = await axios.put(
-          `http://localhost:3000/products/${editId}`,
+          `${API_BASE_URL}/products/${editId}`,
           {
             BookName,
             Price: Number(Price),
@@ -63,7 +64,7 @@ const AdminProducts = () => {
       } else {
         // Add new product
         const response = await axios.post(
-          "http://localhost:3000/create",
+          `${API_BASE_URL}/create`,
           {
             BookName,
             Price: Number(Price),
@@ -117,7 +118,7 @@ const AdminProducts = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.delete(`http://localhost:3000/products/${id}`, {
+      const response = await axios.delete(`${API_BASE_URL}/products/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -10,121 +10,120 @@ import {
   UserRound,
   Package,
   Heart,
-  Gift,
   LogOut,
   ShoppingCart,
   Search,
   ShieldCheck,
+  X,
+  Sparkles,
 } from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({
+  searchTerm = "",
+  setSearchTerm = null,
+  selectedCategory = "All",
+  setSelectedCategory = null,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
   const [loginOpen, setLoginOpen] = useState(false);
 
-  // =========================
   // Redux State
-  // =========================
   const { user } = useSelector((state) => state.user);
+  const cart = useSelector((state) => state.cart?.items || []);
+  const wishlist = useSelector((state) => state.wishlist?.items || []);
 
-  const cart = useSelector(
-    (state) => state.cart?.items || []
-  );
-
-  const wishlist = useSelector(
-    (state) => state.wishlist?.items || []
-  );
-
-  // =========================
-  // Counts
-  // =========================
-  const cartCount = cart.reduce(
-    (sum, item) => sum + (item.quantity || 0),
-    0
-  );
-
+  const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
   const wishlistCount = wishlist.length;
 
-  // =========================
-  // Admin Check
-  // =========================
-  const isAdmin =
-    user?.role === "admin" ||
-    user?.role === "Admin";
+  const isAdmin = user?.role === "admin" || user?.role === "Admin";
 
-  // =========================
-  // Logout
-  // =========================
   const handleLogout = () => {
     setLoginOpen(false);
-
     dispatch(logout());
-
     localStorage.removeItem("token");
-
     navigate("/signin");
   };
 
-  // =========================
-  // Navigation
-  // =========================
   const goTo = (path) => {
     setLoginOpen(false);
     navigate(path);
   };
 
+  const handleCategoryClick = (catName) => {
+    if (setSelectedCategory) {
+      setSelectedCategory(catName);
+    } else {
+      navigate("/", { state: { category: catName } });
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    if (setSearchTerm) {
+      setSearchTerm(val);
+    } else {
+      navigate("/", { state: { search: val } });
+    }
+  };
+
+  const categories = [
+    { name: "All", label: "✨ All Books" },
+    { name: "Academics", label: "📖 Academics" },
+    { name: "Fiction", label: "📘 Fiction" },
+    { name: "Non Fiction", label: "📚 Non Fiction" },
+    { name: "Children", label: "🧒 Children" },
+    { name: "Young Adults", label: "🎨 Young Adults" },
+    { name: "Comics & Graphic Novels", label: "💥 Comics" },
+  ];
+
   return (
     <>
-      {/* =====================================================
-          MAIN NAVBAR
-      ====================================================== */}
-      <nav className="bg-[#5C3A21] text-[#FFF8E7] shadow-lg">
+      {/* Top Banner Announcement */}
+      <div className="bg-[#3E2615] text-[#F3EFEA] text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
+        <Sparkles className="w-3.5 h-3.5 text-[#D4A017] animate-pulse" />
+        <span>Free Shipping on Orders Over ₹499 | Instant Delivery across India</span>
+      </div>
 
+      {/* Main Glass Navbar */}
+      <nav className="glass-nav text-[#FFF8E7] sticky top-0 z-50 border-b border-[#7A4E2F]/40 shadow-xl transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-20 gap-4">
 
-          <div className="flex items-center justify-between h-20">
-
-            {/* =================================================
-                LOGO
-            ================================================== */}
+            {/* Logo */}
             <div
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-3 cursor-pointer group"
             >
-              <span className="text-3xl">
-                📚
-              </span>
+              <div className="w-11 h-11 bg-gradient-to-tr from-[#D4A017] to-[#B8860B] rounded-2xl flex items-center justify-center shadow-lg shadow-[#D4A017]/20 group-hover:scale-105 transition duration-300">
+                <span className="text-2xl">📚</span>
+              </div>
 
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-extrabold tracking-wide">
+                <span className="text-2xl font-extrabold tracking-tight font-serif text-[#FFF8E7] group-hover:text-[#D4A017] transition duration-300">
                   PaperHaven
                 </span>
-
-                <span className="text-[10px] sm:text-xs text-[#D4A017] tracking-widest">
-                  BOOK STORE
+                <span className="text-[10px] text-[#D4A017] font-bold tracking-widest uppercase">
+                  LITERARY HEAVEN
                 </span>
               </div>
 
-              {/* Admin Badge */}
               {isAdmin && (
-                <span className="hidden sm:inline-block ml-2 bg-[#D4A017] text-[#5C3A21] text-[10px] px-2 py-1 rounded-full font-bold uppercase">
+                <span className="hidden sm:inline-block ml-1 bg-[#D4A017] text-[#3E2615] text-[10px] px-2.5 py-0.5 rounded-full font-extrabold uppercase shadow-sm">
                   Admin
                 </span>
               )}
             </div>
 
-            {/* =================================================
-                MENU
-            ================================================== */}
-            <ul className="hidden lg:flex items-center gap-8 font-semibold">
-
+            {/* Desktop Quick Nav */}
+            <ul className="hidden md:flex items-center gap-8 font-semibold text-sm">
               <li
                 onClick={() => navigate("/")}
-                className={`cursor-pointer transition ${
+                className={`cursor-pointer transition-colors duration-200 ${
                   location.pathname === "/"
-                    ? "text-[#D4A017]"
+                    ? "text-[#D4A017] font-bold"
                     : "hover:text-[#D4A017]"
                 }`}
               >
@@ -133,303 +132,221 @@ const Navbar = () => {
 
               <li
                 onClick={() => navigate("/")}
-                className="cursor-pointer hover:text-[#D4A017] transition"
+                className="cursor-pointer hover:text-[#D4A017] transition-colors duration-200"
               >
-                Products
+                Explore Books
               </li>
 
-              <li
-                className="cursor-pointer hover:text-[#D4A017] transition"
-              >
-                About
-              </li>
-
-              <li
-                className="cursor-pointer hover:text-[#D4A017] transition"
-              >
-                Contact
-              </li>
-
+              {user && (
+                <li
+                  onClick={() => navigate("/orders")}
+                  className={`cursor-pointer transition-colors duration-200 ${
+                    location.pathname === "/orders"
+                      ? "text-[#D4A017] font-bold"
+                      : "hover:text-[#D4A017]"
+                  }`}
+                >
+                  My Orders
+                </li>
+              )}
             </ul>
 
-            {/* =================================================
-                RIGHT SIDE
-            ================================================== */}
+            {/* Right Actions */}
             <div className="flex items-center gap-2 sm:gap-3">
 
-              {/* =================================================
-                  CART
-              ================================================== */}
+              {/* Wishlist Icon */}
+              <button
+                onClick={() => navigate("/wishlist")}
+                className="relative flex items-center gap-1.5 hover:bg-[#7A4E2F]/60 px-3 py-2 rounded-xl transition duration-200"
+                title="My Wishlist"
+              >
+                <Heart className="w-5 h-5 text-[#F3EFEA] hover:text-red-400 transition" />
+                <span className="hidden lg:inline text-sm font-semibold">
+                  Wishlist
+                </span>
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full shadow-md animate-bounce">
+                    {wishlistCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Shopping Cart Button */}
               <button
                 onClick={() => navigate("/cart")}
-                className="relative flex items-center gap-1 hover:bg-[#6E472B] px-3 py-2 rounded-lg transition"
+                className="relative flex items-center gap-2 bg-[#D4A017] hover:bg-[#B8860B] text-[#2C1810] font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-[#D4A017]/20 transition transform hover:scale-[1.03]"
                 title="Shopping Cart"
               >
                 <ShoppingCart className="w-5 h-5" />
-
-                <span className="hidden sm:inline">
+                <span className="hidden sm:inline text-sm">
                   Cart
                 </span>
-
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#D4A017] text-[#5C3A21] text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full">
+                  <span className="bg-[#2C1810] text-[#D4A017] text-xs font-black min-w-[20px] h-[20px] px-1 flex items-center justify-center rounded-full">
                     {cartCount}
                   </span>
                 )}
               </button>
 
-              {/* =================================================
-                  USER LOGIN DROPDOWN
-              ================================================== */}
+              {/* User Dropdown */}
               <div className="relative">
-
-                {/* Login / User Button */}
                 <button
                   onClick={() => setLoginOpen(!loginOpen)}
-                  className="flex items-center gap-2 bg-white text-[#2B2118] px-3 sm:px-5 py-2.5 rounded-lg font-semibold hover:bg-gray-100 transition"
+                  className="flex items-center gap-2 bg-[#FFF8E7] text-[#2C1810] px-3 sm:px-4 py-2 rounded-xl font-bold hover:bg-white transition duration-200 shadow-sm"
                 >
-                  <User className="w-5 h-5" />
-
-                  <span className="hidden sm:inline max-w-[100px] truncate">
-                    {user ? user.name : "Login"}
+                  <User className="w-5 h-5 text-[#5C3A21]" />
+                  <span className="hidden sm:inline max-w-[90px] truncate text-sm">
+                    {user ? user.name : "Account"}
                   </span>
-
                   {loginOpen ? (
-                    <ChevronUp className="w-4 h-4" />
+                    <ChevronUp className="w-4 h-4 text-gray-600" />
                   ) : (
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
                   )}
                 </button>
 
-                {/* DROPDOWN */}
+                {/* Dropdown Menu */}
                 {loginOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-72 bg-white text-[#2B2118] rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
-
-                    {/* USER HEADER */}
-                    <div className="px-5 py-4 bg-[#FFF8E7] border-b border-gray-200">
-
+                  <div className="absolute right-0 top-full mt-2 w-72 bg-white text-[#2C1810] rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden animate-toast">
+                    {/* Header */}
+                    <div className="px-5 py-4 bg-[#FFF8E7] border-b border-amber-100">
                       {user ? (
                         <div>
-                          <p className="text-sm text-gray-500">
-                            Welcome back
-                          </p>
-
-                          <p className="font-bold text-lg">
-                            {user.name}
-                          </p>
-
+                          <p className="text-xs text-gray-500 font-medium">Logged in as</p>
+                          <p className="font-bold text-base text-[#5C3A21] truncate">{user.name}</p>
+                          <p className="text-xs text-gray-400 truncate">{user.email}</p>
                           {isAdmin && (
-                            <div className="flex items-center gap-1 mt-1 text-xs text-[#D4A017] font-semibold">
-                              <ShieldCheck className="w-3.5 h-3.5" />
-                              Administrator
+                            <div className="flex items-center gap-1 mt-1 text-[11px] text-[#B8860B] font-extrabold uppercase">
+                              <ShieldCheck className="w-3.5 h-3.5" /> Administrator
                             </div>
                           )}
                         </div>
                       ) : (
                         <div className="flex items-center justify-between">
-
                           <div>
-                            <p className="text-sm text-gray-500">
-                              New customer?
-                            </p>
-
-                            <p className="font-semibold">
-                              Create your account
-                            </p>
+                            <p className="text-xs text-gray-500 font-medium">Welcome to PaperHaven</p>
+                            <p className="font-bold text-sm text-[#5C3A21]">Get Started</p>
                           </div>
-
                           <button
                             onClick={() => goTo("/signup")}
-                            className="text-[#5C3A21] font-bold hover:text-[#D4A017]"
+                            className="bg-[#5C3A21] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#3E2615] transition"
                           >
                             Sign Up
                           </button>
-
                         </div>
                       )}
-
                     </div>
 
-                    {/* =================================================
-                        MY PROFILE
-                    ================================================== */}
-                    <button
-                      onClick={() => goTo("/profile")}
-                      className="w-full flex items-center gap-4 px-5 py-3 hover:bg-gray-100 transition text-left"
-                    >
-                      <UserRound className="w-5 h-5 text-gray-600" />
+                    {/* Menu Links */}
+                    {user && (
+                      <button
+                        onClick={() => goTo("/profile")}
+                        className="w-full flex items-center gap-3.5 px-5 py-3 hover:bg-slate-50 transition text-left text-sm font-semibold"
+                      >
+                        <UserRound className="w-4 h-4 text-[#5C3A21]" /> My Profile
+                      </button>
+                    )}
 
-                      <span>
-                        My Profile
-                      </span>
-                    </button>
-
-                    {/* =================================================
-                        ORDERS
-                    ================================================== */}
                     <button
                       onClick={() => goTo("/orders")}
-                      className="w-full flex items-center gap-4 px-5 py-3 hover:bg-gray-100 transition text-left"
+                      className="w-full flex items-center gap-3.5 px-5 py-3 hover:bg-slate-50 transition text-left text-sm font-semibold"
                     >
-                      <Package className="w-5 h-5 text-gray-600" />
-
-                      <span>
-                        My Orders
-                      </span>
+                      <Package className="w-4 h-4 text-[#5C3A21]" /> My Orders
                     </button>
 
-                    {/* =================================================
-                        WISHLIST
-                    ================================================== */}
                     <button
                       onClick={() => goTo("/wishlist")}
-                      className="w-full flex items-center justify-between px-5 py-3 hover:bg-gray-100 transition text-left"
+                      className="w-full flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition text-left text-sm font-semibold"
                     >
-
-                      <div className="flex items-center gap-4">
-
-                        <Heart className="w-5 h-5 text-gray-600" />
-
-                        <span>
-                          Wishlist
-                        </span>
-
+                      <div className="flex items-center gap-3.5">
+                        <Heart className="w-4 h-4 text-[#5C3A21]" /> Wishlist
                       </div>
-
                       {wishlistCount > 0 && (
-                        <span className="bg-[#D4A017] text-[#5C3A21] text-xs font-bold px-2 py-1 rounded-full">
+                        <span className="bg-[#D4A017] text-[#2C1810] text-xs font-bold px-2 py-0.5 rounded-full">
                           {wishlistCount}
                         </span>
                       )}
-
                     </button>
-                    
-                    {/* =================================================
-                        ADMIN DASHBOARD
-                        ONLY ADMIN
-                    ================================================== */}
+
                     {isAdmin && (
                       <button
-                        onClick={() =>
-                          goTo("/admin/products")
-                        }
-                        className="w-full flex items-center gap-4 px-5 py-3 bg-amber-50 hover:bg-amber-100 transition text-left border-t border-amber-200"
+                        onClick={() => goTo("/admin/products")}
+                        className="w-full flex items-center gap-3.5 px-5 py-3 bg-amber-50 hover:bg-amber-100 transition text-left text-sm font-bold border-t border-amber-200 text-[#5C3A21]"
                       >
-                        <ShieldCheck className="w-5 h-5 text-[#D4A017]" />
-
-                        <span className="font-semibold text-[#5C3A21]">
-                          Admin Dashboard
-                        </span>
+                        <ShieldCheck className="w-4 h-4 text-[#D4A017]" /> Admin Product Dashboard
                       </button>
                     )}
 
-                    {/* =================================================
-                        SIGN IN FOR GUEST
-                    ================================================== */}
-                    {!user && (
+                    {!user ? (
                       <button
                         onClick={() => goTo("/signin")}
-                        className="w-full flex items-center gap-4 px-5 py-3 hover:bg-[#FFF8E7] transition text-left border-t"
+                        className="w-full flex items-center gap-3.5 px-5 py-3 hover:bg-[#FFF8E7] transition text-left text-sm font-bold border-t text-[#5C3A21]"
                       >
-                        <User className="w-5 h-5 text-[#5C3A21]" />
-
-                        <span className="font-semibold">
-                          Sign In
-                        </span>
+                        <User className="w-4 h-4 text-[#5C3A21]" /> Sign In
                       </button>
-                    )}
-
-                    {/* =================================================
-                        LOGOUT
-                    ================================================== */}
-                    {user && (
+                    ) : (
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-4 px-5 py-3 hover:bg-red-50 text-red-600 transition text-left border-t"
+                        className="w-full flex items-center gap-3.5 px-5 py-3 hover:bg-red-50 text-red-600 transition text-left text-sm font-bold border-t border-slate-100"
                       >
-                        <LogOut className="w-5 h-5" />
-
-                        <span>
-                          Logout
-                        </span>
+                        <LogOut className="w-4 h-4" /> Log Out
                       </button>
                     )}
-
                   </div>
                 )}
-
               </div>
 
             </div>
-
           </div>
-
         </div>
       </nav>
 
-      {/* =====================================================
-          CATEGORIES
-      ====================================================== */}
-      <div className="bg-[#6E472B] text-[#FFF8E7]">
-
-        <div className="max-w-7xl mx-auto px-4">
-
-          <div className="flex justify-center items-center gap-6 sm:gap-8 py-3 flex-wrap text-sm font-medium">
-
-            <button className="hover:text-[#D4A017] transition">
-              Academics
-            </button>
-
-            <button className="hover:text-[#D4A017] transition">
-              Fiction
-            </button>
-
-            <button className="hover:text-[#D4A017] transition">
-              Non Fiction
-            </button>
-
-            <button className="hover:text-[#D4A017] transition">
-              Children
-            </button>
-
-            <button className="hover:text-[#D4A017] transition">
-              Young Adults
-            </button>
-
-            <button className="hover:text-[#D4A017] transition">
-              Comics & Graphic Novels
-            </button>
-
-          </div>
-
-        </div>
-      </div>
-
-      {/* =====================================================
-          SEARCH BAR
-      ====================================================== */}
-      <div className="bg-[#FFF8E7] py-5">
-
-        <div className="max-w-7xl mx-auto px-4">
-
-          <div className="flex justify-center">
-
-            <div className="flex w-full max-w-2xl">
-
+      {/* Live Search & Real-Time Filter Bar */}
+      <div className="bg-[#FFF8E7] border-b border-[#E8DCCB] py-4 shadow-inner">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          
+          {/* Live Search Input */}
+          <div className="flex justify-center mb-3">
+            <div className="relative w-full max-w-2xl">
               <input
                 type="text"
-                placeholder="Search books..."
-                className="flex-1 px-4 py-3 border border-[#D6C6B8] rounded-l-lg outline-none focus:ring-2 focus:ring-[#D4A017] bg-white"
+                placeholder="⚡ Live Search by book name, author, language..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="w-full pl-12 pr-10 py-3 bg-white border-2 border-[#D6C6B8] focus:border-[#D4A017] rounded-2xl outline-none shadow-sm text-sm text-[#2C1810] font-medium transition duration-200 placeholder:text-gray-400"
               />
-
-              <button
-                className="bg-[#D4A017] hover:bg-[#B8860B] px-6 rounded-r-lg text-white transition flex items-center justify-center"
-              >
-                <Search className="w-5 h-5" />
-              </button>
-
+              <Search className="w-5 h-5 text-[#8C6D53] absolute left-4 top-3.5 pointer-events-none" />
+              
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm && setSearchTerm("")}
+                  className="absolute right-3.5 top-3.5 p-0.5 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-600 transition"
+                  title="Clear Search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
+          </div>
 
+          {/* Real-Time Interactive Category Tabs */}
+          <div className="flex items-center justify-center gap-2 py-1 flex-wrap overflow-x-auto">
+            {categories.map((cat) => {
+              const isActive = selectedCategory === cat.name;
+              return (
+                <button
+                  key={cat.name}
+                  onClick={() => handleCategoryClick(cat.name)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#5C3A21] text-[#FFF8E7] shadow-md shadow-[#5C3A21]/30 scale-105"
+                      : "bg-white/80 hover:bg-white text-[#5C3A21] border border-[#E8DCCB] hover:border-[#5C3A21]"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              );
+            })}
           </div>
 
         </div>
