@@ -1,6 +1,1 @@
-{
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
-}
+// File removed. Single vercel.json is maintained at repository root.

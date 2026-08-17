@@ -1,8 +1,10 @@
 {
   "name": "paperhaven-monorepo",
   "private": true,
+  "workspaces": [
+    "Frontend"
+  ],
   "scripts": {
-    "build": "cd Frontend && npm install && npm run build",
-    "install-deps": "cd Frontend && npm install && cd ../BackEnd && npm install"
+    "build": "npm run build --workspace=Frontend"
   }
 }
