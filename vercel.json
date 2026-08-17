@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build --workspace=Frontend",
+  "buildCommand": "npm run build",
   "outputDirectory": "Frontend/dist",
   "rewrites": [
     {
