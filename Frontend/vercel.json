@@ -1,1 +1,8 @@
-// File removed. Single vercel.json is maintained at repository root.
+{
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}
