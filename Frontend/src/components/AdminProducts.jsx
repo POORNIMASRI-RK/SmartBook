@@ -3,9 +3,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import axios from "axios";
 
-import { getBookCover } from "./Product";
-
-const INLINE_SVG_COVER = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgMzAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzVDM0EyMSIvPjxyZWN0IHg9IjEyIiB5PSIxMiIgd2lkdGg9IjI3NiIgaGVpZ2h0PSIzNzYiIGZpbGw9IiNGRkY4RTciIHJ4PSIxMCIvPjxwYXRoIGQ9Ik00MCA4MCBoMjIwIE00MCAxZAo=";
+const INLINE_SVG_COVER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><rect width='100%' height='100%' fill='%235C3A21'/><rect x='12' y='12' width='276' height='376' fill='%23FFF8E7' rx='10'/><path d='M40 80 h220 M40 120 h220 M40 160 h180' stroke='%23D4A017' stroke-width='4' stroke-linecap='round'/><text x='150' y='240' font-family='serif' font-size='22' font-weight='bold' fill='%232C1810' text-anchor='middle'>PaperHaven</text><text x='150' y='270' font-family='sans-serif' font-size='14' fill='%235C3A21' text-anchor='middle'>Classic Edition</text><circle cx='150' cy='330' r='20' fill='%23D4A017'/></svg>";
 
 const AdminProducts = () => {
   // State variables for inputs, form visibility, and products list
@@ -309,7 +307,7 @@ const AdminProducts = () => {
               >
                 <div>
                   <img
-                    src={getBookCover(prod)}
+                    src={prod.Image || prod.image || prod.imageUrl || INLINE_SVG_COVER}
                     alt={prod.BookName || "Book"}
                     onError={(e) => {
                       e.target.onerror = null;
