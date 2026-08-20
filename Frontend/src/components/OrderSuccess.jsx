@@ -213,7 +213,15 @@ function OrderSuccess() {
                     <div className="flex items-center gap-4">
                       <div className="w-14 h-16 bg-[#FFF8E7] rounded-xl border border-slate-200 overflow-hidden p-1 flex items-center justify-center flex-shrink-0">
                         {imgUrl ? (
-                          <img src={imgUrl} alt={productName} className="w-full h-full object-contain" />
+                          <img
+                            src={imgUrl}
+                            alt={productName}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                            }}
+                            className="w-full h-full object-contain"
+                          />
                         ) : (
                           <Package className="w-6 h-6 text-gray-400" />
                         )}

@@ -24,7 +24,6 @@ const getAllProducts = async(req, res) => {
         const cachedProducts = await redisClient.get("products");
 
         if(cachedProducts){
-            console.log("Products fetched fron Redis caches");
             return res.status(200).json({
                 success: true,
                 message: " Products fetched successfully",
@@ -61,7 +60,7 @@ const getProductsById = async(req, res) =>{
         }
         res.status(200).json({
             success: true,
-            message: " product fetched by ID",
+            message: "product fetched by ID",
             product,
         });
     }catch(error){

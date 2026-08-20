@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/user/userSlice";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -12,6 +14,26 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
 
+    const handleGoogleLoginSuccess = async (credentialResponse) =>{
+        try{
+            const user = jwtDecode(credentialResponse.credential);
+            console.log("Google user info:", user);
+            dispatch(
+                loginSuccess({
+                token : credentialResponse.credential,
+                user: { 
+                    email: user.email,
+                    name: user.name,
+                    role: "user",
+                }
+                })
+            );
+            navigate("/", { replace: true });
+            }catch(err){
+            console.error("Google login failed:", err);
+            setErrorMsg("Google Sign-In failed.");
+        }
+    };
     const handleSubmit = async(e) => {
         e.preventDefault();
         setErrorMsg("");

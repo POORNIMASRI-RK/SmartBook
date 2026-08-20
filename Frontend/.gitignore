@@ -26,7 +26,8 @@ dist-ssr
 .env
 not this.env
 
-
+.gitignore
 
 package-lock.json
 
+package.json

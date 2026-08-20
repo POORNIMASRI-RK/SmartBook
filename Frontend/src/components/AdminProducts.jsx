@@ -18,7 +18,6 @@ const AdminProducts = () => {
   // Fetch all products from backend
   const fetchProducts = async () => {
     try {
-      console.log("Fetching products...");
       const resp = await axios.get(`${import.meta.env.VITE_BACKEND_URL}products`);
       console.log("Products fetched: ", resp);
       setProducts(resp.data.product || resp.data.products || []);
@@ -277,8 +276,12 @@ const AdminProducts = () => {
               >
                 <div>
                   <img
-                    src={prod.Image || "https://via.placeholder.com/150"}
+                    src={prod.Image}
                     alt={prod.BookName}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                    }}
                     className="h-44 w-full object-cover rounded mb-2"
                   />
                   <h3 className="font-bold text-lg">{prod.BookName}</h3>

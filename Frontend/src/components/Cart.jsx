@@ -117,6 +117,10 @@ const Cart = () => {
                         <img
                           src={item.Image}
                           alt={itemName}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                          }}
                           className="w-full h-full object-contain group-hover:scale-105 transition duration-300"
                         />
                       </div>

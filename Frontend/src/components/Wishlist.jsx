@@ -77,6 +77,10 @@ const Wishlist = () => {
                     <img
                       src={item.Image}
                       alt={name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                      }}
                       className="h-full max-h-[220px] w-auto object-contain drop-shadow-md"
                     />
                   </div>
