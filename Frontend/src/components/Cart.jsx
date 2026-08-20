@@ -17,6 +17,10 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { getBookCover } from "./Product";
+
+const INLINE_SVG_COVER = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgMzAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzVDM0EyMSIvPjxyZWN0IHg9IjEyIiB5PSIxMiIgd2lkdGg9IjI3NiIgaGVpZ2h0PSIzNzYiIGZpbGw9IiNGRkY4RTciIHJ4PSIxMCIvPjxwYXRoIGQ9Ik00MCA4MCBoMjIwIE00MCAxZAo=";
+
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -115,11 +119,11 @@ const Cart = () => {
                       {/* Product Image */}
                       <div className="w-24 h-28 sm:w-28 sm:h-32 bg-[#FFF8E7] rounded-xl overflow-hidden flex-shrink-0 border border-[#E8DCCB] p-2 flex items-center justify-center relative group">
                         <img
-                          src={item.Image}
+                          src={getBookCover(item)}
                           alt={itemName}
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                            e.target.src = INLINE_SVG_COVER;
                           }}
                           className="w-full h-full object-contain group-hover:scale-105 transition duration-300"
                         />

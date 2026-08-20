@@ -20,6 +20,35 @@ import {
   ArrowUpDown,
 } from "lucide-react";
 
+const INLINE_SVG_COVER = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgMzAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzVDM0EyMSIvPjxyZWN0IHg9IjEyIiB5PSIxMiIgd2lkdGg9IjI3NiIgaGVpZ2h0PSIzNzYiIGZpbGw9IiNGRkY4RTciIHJ4PSIxMCIvPjxwYXRoIGQ9Ik00MCA4MCBoMjIwIE00MCAxZAo=";
+
+export const getBookCover = (prod) => {
+  const title = (prod?.BookName || prod?.name || "").toLowerCase();
+  
+  if (title.includes("atomic habits")) {
+    return "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400";
+  }
+  if (title.includes("psychology of money")) {
+    return "https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&q=80&w=400";
+  }
+  if (title.includes("think and grow rich")) {
+    return "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400";
+  }
+  if (title.includes("subconscious mind")) {
+    return "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400";
+  }
+  if (title.includes("you can win")) {
+    return "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=400";
+  }
+
+  const rawUrl = prod?.Image || prod?.image || prod?.imageUrl;
+  if (rawUrl && typeof rawUrl === "string" && rawUrl.startsWith("http") && !rawUrl.includes("m.media-amazon.com")) {
+    return rawUrl;
+  }
+
+  return INLINE_SVG_COVER;
+};
+
 const Product = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -270,11 +299,11 @@ const Product = () => {
                     {/* Book Cover Container */}
                     <div className="bg-[#FFF8E7] p-5 flex items-center justify-center relative overflow-hidden h-64 border-b border-[#F3EFEA]">
                       <img
-                        // src={prod.Image}
-                        alt={prod.BookName}
+                        src={getBookCover(prod)}
+                        alt={prod.BookName || "Book"}
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                          e.target.src = INLINE_SVG_COVER;
                         }}
                         className="h-full max-h-[220px] w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
                       />

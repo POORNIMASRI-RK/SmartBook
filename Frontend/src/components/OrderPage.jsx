@@ -24,6 +24,8 @@ import {
   Check,
 } from "lucide-react";
 
+const INLINE_SVG_COVER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><rect width='100%' height='100%' fill='%235C3A21'/><rect x='12' y='12' width='276' height='376' fill='%23FFF8E7' rx='10'/><path d='M40 80 h220 M40 120 h220 M40 160 h180' stroke='%23D4A017' stroke-width='4' stroke-linecap='round'/><text x='150' y='240' font-family='serif' font-size='22' font-weight='bold' fill='%232C1810' text-anchor='middle'>PaperHaven</text><text x='150' y='270' font-family='sans-serif' font-size='14' fill='%235C3A21' text-anchor='middle'>Classic Edition</text><circle cx='150' cy='330' r='20' fill='%23D4A017'/></svg>";
+
 const OrderPage = () => {
   const token = localStorage.getItem("token");
   const { user } = useSelector((state) => state.user);
@@ -442,11 +444,11 @@ const OrderPage = () => {
                                 <div className="w-12 h-14 bg-[#FFF8E7] rounded-lg border border-slate-200 overflow-hidden flex-shrink-0 p-1 flex items-center justify-center">
                                   {pImg ? (
                                     <img
-                                      src={pImg}
+                                      src={pImg || INLINE_SVG_COVER}
                                       alt={pName}
                                       onError={(e) => {
                                         e.target.onerror = null;
-                                        e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                                        e.target.src = INLINE_SVG_COVER;
                                       }}
                                       className="w-full h-full object-contain"
                                     />

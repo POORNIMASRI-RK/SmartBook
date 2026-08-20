@@ -7,6 +7,10 @@ import { addToCart } from "../features/cart/cartSlice";
 import { removeFromWishlist } from "../features/wishlist/wishlistSlice";
 import { Heart, ShoppingCart, Trash2, ArrowLeft, Star, Sparkles } from "lucide-react";
 
+import { getBookCover } from "./Product";
+
+const INLINE_SVG_COVER = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgMzAwIDQwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzVDM0EyMSIvPjxyZWN0IHg9IjEyIiB5PSIxMiIgd2lkdGg9IjI3NiIgaGVpZ2h0PSIzNzYiIGZpbGw9IiNGRkY4RTciIHJ4PSIxMCIvPjxwYXRoIGQ9Ik00MCA4MCBoMjIwIE00MCAxZAo=";
+
 const Wishlist = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,11 +79,11 @@ const Wishlist = () => {
                 >
                   <div className="bg-[#FFF8E7] p-5 flex items-center justify-center h-64 border-b border-[#F3EFEA] relative">
                     <img
-                      src={item.Image}
+                      src={getBookCover(item)}
                       alt={name}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+                        e.target.src = INLINE_SVG_COVER;
                       }}
                       className="h-full max-h-[220px] w-auto object-contain drop-shadow-md"
                     />
