@@ -270,7 +270,7 @@ const Product = () => {
                     {/* Book Cover Container */}
                     <div className="bg-[#FFF8E7] p-5 flex items-center justify-center relative overflow-hidden h-64 border-b border-[#F3EFEA]">
                       <img
-                        src={prod.Image}
+                        // src={prod.Image}
                         alt={prod.BookName}
                         onError={(e) => {
                           e.target.onerror = null;
